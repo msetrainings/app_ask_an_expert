@@ -20,18 +20,26 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Questions & Answers</a>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Ask An Expert</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="#">Login</a></li>
-            <li><a href="#">Register</a></li>
-            <li><a href="#">Ask Question</a></li>
-            <li><a href="#">Answer Questions</a></li>
-            <li><a href="#">User Setup</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            {% if not user %}
+              <li class="active"><a href="{{ url_for('login') }}">Login</a></li>
+              <li><a href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+            {% if user and user['expert'] == 0 and user['admin'] == 0 %}
+              <li><a href="{{ url_for('ask') }}">Ask Question</a></li>
+            {% endif %}
+            {% if user and user['expert'] == 1 %}
+              <li><a href="{{ url_for('answer') }}">Answer Questions</a></li>
+            {% endif %}
+            {% if user and user['admin'] == 1 %}
+              <li><a href="{{ url_for('users') }}">User Setup</a></li>
+            {% endif %}
             {% if user %}
-              <li><a href="#">Logout</a></li>
+              <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
@@ -51,13 +59,13 @@
                   <div class="form-group">
                     <label for="inputName" class="col-lg-2 control-label">Name</label>
                     <div class="col-lg-10">
-                      <input type="text" class="form-control" name="name" id="inputName" placeholder="Name">
+                      <input type="text" class="form-control" name="name" id="inputName" placeholder="Name" required>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="inputPassword" class="col-lg-2 control-label">Password</label>
                     <div class="col-lg-10">
-                      <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password">
+                      <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
                     </div>
                   </div>
                   <div class="form-group">
